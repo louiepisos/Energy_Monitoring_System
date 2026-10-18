@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "author": "Louie",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-esp32-devkit-v1", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-potentiometer", "id": "pot1", "top": -110, "left": -150, "attrs": {} },
+    { "type": "wokwi-potentiometer", "id": "pot2", "top": -110, "left": 0, "attrs": {} },
+    { "type": "wokwi-potentiometer", "id": "pot3", "top": -110, "left": 150, "attrs": {} },
+    { "type": "wokwi-slide-switch", "id": "sw1", "top": 230, "left": -100, "attrs": {} },
+    { "type": "wokwi-resistor", "id": "r1", "top": 230, "left": 60, "attrs": { "value": "220" } },
+    { "type": "wokwi-led", "id": "led1", "top": 230, "left": 160, "attrs": { "color": "red" } },
+    { "type": "wokwi-buzzer", "id": "bz1", "top": 230, "left": 240, "attrs": {} }
+  ],
+  "connections": [
+    ["pot1:SIG", "esp:D34", "green", []],
+    ["pot1:VCC", "esp:3V3", "red", []],
+    ["pot1:GND", "esp:GND.1", "black", []],
+    ["pot2:SIG", "esp:D35", "green", []],
+    ["pot2:VCC", "esp:3V3", "red", []],
+    ["pot2:GND", "esp:GND.1", "black", []],
+    ["pot3:SIG", "esp:D32", "green", []],
+    ["pot3:VCC", "esp:3V3", "red", []],
+    ["pot3:GND", "esp:GND.1", "black", []],
+    ["sw1:2", "esp:D14", "blue", []],
+    ["sw1:3", "esp:GND.2", "black", []],
+    ["esp:D26", "r1:1", "orange", []],
+    ["r1:2", "led1:A", "orange", []],
+    ["led1:C", "esp:GND.2", "black", []],
+    ["esp:D27", "bz1:2", "purple", []],
+    ["bz1:1", "esp:GND.2", "black", []]
+  ],
+  "dependencies": {}
+}

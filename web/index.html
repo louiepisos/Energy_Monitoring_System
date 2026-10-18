@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Energy Monitor</title>
+</head>
+<body>
+  <h1>Energy Monitor (placeholder)</h1>
+  <p>Placeholder ra ni nga page. Ilisi ni sa tinuod nga dashboard. Gamit ra ni aron makita nga mogana ang API.</p>
+  <table border="1" cellpadding="4">
+    <thead><tr><th>Time (UTC)</th><th>Room</th><th>Watts</th><th>Away</th><th>On</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <script>
+    async function load() {
+      const res = await fetch('/api/readings?limit=15');
+      const data = await res.json();
+      document.getElementById('rows').innerHTML = data.map(r =>
+        `<tr><td>${r.recorded_at}</td><td>${r.room}</td><td>${r.watts}</td><td>${r.away}</td><td>${r.on.join(', ')}</td></tr>`
+      ).join('');
+    }
+    load();
+    setInterval(load, 2000);
+  </script>
+</body>
+</html>

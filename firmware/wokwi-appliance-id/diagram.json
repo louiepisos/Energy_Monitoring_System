@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "author": "Louie",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-esp32-devkit-v1", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-slide-switch", "id": "swFan", "top": 230, "left": -150, "attrs": {} },
+    { "type": "wokwi-slide-switch", "id": "swTv", "top": 230, "left": -80, "attrs": {} },
+    { "type": "wokwi-slide-switch", "id": "swRice", "top": 230, "left": -10, "attrs": {} },
+    { "type": "wokwi-slide-switch", "id": "swAircon", "top": 230, "left": 60, "attrs": {} },
+    { "type": "wokwi-slide-switch", "id": "swAway", "top": 230, "left": 150, "attrs": {} },
+    { "type": "wokwi-resistor", "id": "r1", "top": 330, "left": 60, "attrs": { "value": "220" } },
+    { "type": "wokwi-led", "id": "led1", "top": 330, "left": 170, "attrs": { "color": "red" } }
+  ],
+  "connections": [
+    ["swFan:2", "esp:D13", "green", []],
+    ["swFan:3", "esp:GND.1", "black", []],
+    ["swTv:2", "esp:D14", "green", []],
+    ["swTv:3", "esp:GND.1", "black", []],
+    ["swRice:2", "esp:D27", "green", []],
+    ["swRice:3", "esp:GND.1", "black", []],
+    ["swAircon:2", "esp:D33", "green", []],
+    ["swAircon:3", "esp:GND.1", "black", []],
+    ["swAway:2", "esp:D25", "blue", []],
+    ["swAway:3", "esp:GND.1", "black", []],
+    ["esp:D26", "r1:1", "orange", []],
+    ["r1:2", "led1:A", "orange", []],
+    ["led1:C", "esp:GND.1", "black", []]
+  ],
+  "dependencies": {}
+}

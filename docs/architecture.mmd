@@ -1,0 +1,38 @@
+flowchart LR
+    subgraph client ["Devices and Apps"]
+        espNode["ESP32 Clamp Node"]
+        simNodes["Simulated Room Nodes"]
+        tenantApp["Tenant App"]
+        landlordApp["Landlord Dashboard"]
+    end
+    subgraph gateway ["API Layer"]
+        apiGateway["API Gateway"]
+    end
+    subgraph service ["Core Services"]
+        ingest["Ingestion Service"]
+        nilm["Appliance ID Service"]
+        billing["Bill and Forecast Service"]
+        alerts["Alert Service"]
+    end
+    subgraph datastore ["Data Stores"]
+        db["Cloud Database"]
+    end
+    subgraph external ["External"]
+        telegram["Telegram Bot"]
+    end
+
+    espNode -->|"Sends Readings"| apiGateway
+    simNodes -->|"Sends Readings"| apiGateway
+    tenantApp -->|"Views Usage"| apiGateway
+    landlordApp -->|"Views Bills"| apiGateway
+    apiGateway -->|"Routes Readings"| ingest
+    apiGateway -->|"Routes Queries"| billing
+    apiGateway -->|"Sets Away Mode"| alerts
+    ingest -->|"Writes Readings"| db
+    ingest -->|"Streams Power Data"| nilm
+    nilm -->|"Writes Appliance Events"| db
+    nilm -->|"Flags Left On Loads"| alerts
+    billing -->|"Reads Usage"| db
+    billing -->|"Budget Warnings"| alerts
+    alerts -->|"Stores Alert State"| db
+    alerts -.->|"Telegram: Sends Alerts"| telegram
