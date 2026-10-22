@@ -1,12 +1,13 @@
 -- Energy Monitor database schema (SQLite)
--- Ang oras gi ave sa UTC nga format: "YYYY-MM-DD HH:MM:SS"
--- Ang rooms ug readings ra ang gigamit sa API karon
+-- Times are stored in UTC, format "YYYY-MM-DD HH:MM:SS".
+-- Only rooms and readings are used by the API right now. The other tables are
+-- ready for whoever builds bills, alerts, and appliance identification.
 
 CREATE TABLE IF NOT EXISTS rooms (
   id           INTEGER PRIMARY KEY AUTOINCREMENT,
-  code         TEXT NOT NULL UNIQUE,          -- short code nga ipadala sa ESP32, example "A"
+  code         TEXT NOT NULL UNIQUE,          -- short code the ESP32 sends, e.g. "A"
   name         TEXT,
-  is_simulated INTEGER NOT NULL DEFAULT 0     -- 1 = fake node, 0 = true clamp node
+  is_simulated INTEGER NOT NULL DEFAULT 0     -- 1 = fake node, 0 = real clamp node
 );
 
 CREATE TABLE IF NOT EXISTS users (
@@ -21,7 +22,7 @@ CREATE TABLE IF NOT EXISTS readings (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
   room_id     INTEGER NOT NULL REFERENCES rooms(id),
   watts       REAL NOT NULL,
-  away        INTEGER NOT NULL DEFAULT 0,          -- 1 = wala sa balay ang tenant
+  away        INTEGER NOT NULL DEFAULT 0,          -- 1 = tenant is away
   appliances  TEXT NOT NULL DEFAULT '[]',          -- JSON array, e.g. ["Fan","TV"]
   recorded_at TEXT NOT NULL DEFAULT (datetime('now'))
 );

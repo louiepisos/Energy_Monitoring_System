@@ -1,4 +1,4 @@
-// Built-in na ang SQLite sa Node 22+, wala nay native module nga i-install
+// SQLite is built into Node 22+, so there's no native module to install
 const { DatabaseSync } = require('node:sqlite');
 const fs = require('fs');
 const path = require('path');
@@ -10,10 +10,10 @@ const db = new DatabaseSync(path.join(dataDir, 'energy.db'));
 db.exec('PRAGMA journal_mode = WAL');
 db.exec('PRAGMA foreign_keys = ON');
 
-// Himoa ang mga table kung wala pa
+// Create the tables if they don't exist yet
 db.exec(fs.readFileSync(path.join(__dirname, '..', 'schema.sql'), 'utf8'));
 
-// Demo rooms: ang A mao ang tinuod nga clamp node, ang B ug C simulated ra
+// Demo rooms: A is the real clamp node, B and C are simulated
 const { n } = db.prepare('SELECT COUNT(*) AS n FROM rooms').get();
 if (n === 0) {
   const insert = db.prepare('INSERT INTO rooms (code, name, is_simulated) VALUES (?, ?, ?)');

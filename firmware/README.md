@@ -1,17 +1,17 @@
 # Firmware (ESP32)
 
-Duha ka Wokwi project ni. Sa Wokwi, himo ug bag-ong ESP32 project (Arduino style),
-i-paste ang `diagram.json` sa diagram tab ug ang `sketch.ino` sa code tab, unya press Play.
+Both folders are Wokwi projects. In Wokwi, start a new ESP32 project (Arduino style),
+paste `diagram.json` into the diagram tab and `sketch.ino` into the code tab, then press Play.
 
-| Folder | Unsa ang gi-simulate |
+| Folder | What it simulates |
 |---|---|
-| `wokwi-rooms-forecast` | 3 ka kuwarto (potentiometers), away-mode alert, simulated nga bill forecast ug CO2 |
-| `wokwi-appliance-id` | Usa ka total power reading; mangita ug jumps ug mag-identify kung unsang appliance ang gi-on |
+| `wokwi-rooms-forecast` | 3 rooms (potentiometers), an away-mode alert, a simulated bill forecast and CO2 |
+| `wokwi-appliance-id` | One total power reading. It spots the jumps and works out which appliance switched on |
 
-Ang tinuod nga node mopuli sa potentiometers gamit ang SCT-013-030 clamp (tan-awa ang `docs/WIRING.md`)
-ug mo-send ug readings sa backend sumala sa `docs/API_CONTRACT.md`.
+The real node will swap the potentiometers for the SCT-013-030 clamp (see `docs/WIRING.md`)
+and send readings to the backend in the format from `docs/API_CONTRACT.md`.
 
-Kung wala mo-gawas ang Serial Monitor sa Wokwi, idugang ang `"serialMonitor": { "display": "always" },`
-human sa `"editor": "wokwi",` nga linya sa `diagram.json`.
+If the Serial Monitor doesn't show up in Wokwi, add `"serialMonitor": { "display": "always" },`
+right after the `"editor": "wokwi",` line in `diagram.json`.
 
-Ibutang ang code sa tinuod nga node sa bag-ong folder: `firmware/esp32-node/`.
+Put the code for the real node in a new folder: `firmware/esp32-node/`.

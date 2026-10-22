@@ -1,8 +1,11 @@
-// Mo-send ug peke nga readings Taga Sec, para ni maka build sa dashboard ug logic bisan wala pa ang hardware.
-// I-start una ang API (npm start), unya i-run ni sa lain nga terminal:
+// Sends fake readings every second so you can build the dashboard and logic
+// before the hardware shows up.
+// Start the API first (npm start), then run this in a second terminal:
 //   npm run simulate
-// specific nga rooms lang:        SIM_ROOMS=B,C npm run simulate
-// Lain nga server:          API_URL=http://192.168.1.10:3000/api/readings npm run simulate
+// Only some rooms (Mac/Linux):  SIM_ROOMS=B,C npm run simulate
+// Windows PowerShell:          $env:SIM_ROOMS="B,C"; npm run simulate
+// Windows Command Prompt:      set SIM_ROOMS=B,C && npm run simulate
+// Different server:          API_URL=http://192.168.1.10:3000/api/readings npm run simulate
 
 const URL = process.env.API_URL || 'http://localhost:3000/api/readings';
 const only = (process.env.SIM_ROOMS || 'A,B,C').split(',').map((s) => s.trim());
@@ -17,7 +20,7 @@ const isOn = Object.fromEntries(rooms.map((r) => [r.room, new Set()]));
 
 function tick() {
   for (const r of rooms) {
-    // usahay, i-on o i-off ang usa ka random nga appliance
+    // every so often, switch a random appliance on or off
     if (Math.random() < 0.1) {
       const a = r.appliances[Math.floor(Math.random() * r.appliances.length)];
       const set = isOn[r.room];

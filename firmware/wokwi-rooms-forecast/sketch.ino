@@ -1,34 +1,34 @@
 // Energy Monitor Simulation (Wokwi, ESP32)
 //
-// Unsa ni: per-room tracking, away-mode alert para sa phantom load,
-// bill forecast, CO2 report, ug gipadali nga oras (simulated time).
+// What it does: per-room tracking, an away-mode alert for phantom load,
+// a bill forecast, a CO2 report, and sped-up time.
 //
-// Ang 3 ka potentiometer mao ang puli sa clamp sensor (0-200 W).
-// I-turn ang knob = mas daghan nga gamit sa kuryente.
+// The 3 potentiometers stand in for the clamp sensor (0-200 W).
+// Turn a knob up to pretend that room is using more power.
 
 const int NUM_ROOMS = 3;
 const int potPins[NUM_ROOMS] = {34, 35, 32};
 const char* rooms[NUM_ROOMS] = {"Bedroom", "Kitchen", "Living room"};
 
-// Normal nga kanunay naka-on kada kuwarto, in watts (naa sa Kitchen ang fridge)
+// Normal always-on load per room in watts (the Kitchen has the fridge)
 const float baseline[NUM_ROOMS] = {5, 15, 5};
 
 const int awayPin = 14;
 const int ledPin = 26;
 const int buzzerPin = 27;
 
-const float MAX_WATTS = 200;           // kung puno ang pot = 200 W
-const float THRESHOLD = 10;            // sobra nga watts nga isipon nato nga "nakalimtan"
-const unsigned long HOLD_MS = 10000;   // 10 ka segundo dinhi = 10 ka minuto sa tinuod
+const float MAX_WATTS = 200;           // pot at full = 200 W
+const float THRESHOLD = 10;            // extra watts that count as "forgotten"
+const unsigned long HOLD_MS = 10000;   // 10 real seconds stands in for 10 minutes
 
-// ---- Billing settings (ILISI ni para mo-match sa imong tinuod nga bill) ----
-const float RATE = 12.0;               // PHP kada kWh
-const float CO2_FACTOR = 0.7;          // kg CO2 kada kWh (placeholder lang ni, i-check ang pinakabag-o nga figure)
-const float BUDGET = 1800;             // budget sa usa ka bulan, in PHP
-const int CYCLE_DAYS = 30;             // pila ka adlaw ang billing cycle
+// ---- Billing settings (change these to match your real bill) ----
+const float RATE = 12.0;               // PHP per kWh
+const float CO2_FACTOR = 0.7;          // kg CO2 per kWh (just a placeholder, look up the latest figure)
+const float BUDGET = 1800;             // monthly budget in PHP
+const int CYCLE_DAYS = 30;             // days in the billing cycle
 
 // ---- Simulated time ----
-// Matag loop (1 segundo) isipon nga 6 ka oras, so 1 adlaw = 4 s ug 1 bulan = 2 min.
+// Each loop (1 real second) counts as 6 hours, so 1 day = 4 s and 1 month = 2 min.
 const float HOURS_PER_TICK = 6.0;
 
 bool over[NUM_ROOMS] = {false, false, false};
@@ -92,7 +92,7 @@ void loop() {
     float extra = watts - baseline[i];
     if (extra < 0) extra = 0;
 
-    // i-add ang nagamit nga energy niining simulated nga time step
+    // add up the energy used in this simulated time step
     roomKwh[i] += watts / 1000.0 * HOURS_PER_TICK;
 
     bool wasAlert = alertOn[i];
@@ -104,7 +104,7 @@ void loop() {
         alertOn[i] = true;
       }
     } else {
-      // gamay nga spike, nibalik sa normal, o naa ka sa balay
+      // short spike, back to normal, or you're home
       over[i] = false;
       alertOn[i] = false;
     }
@@ -120,7 +120,7 @@ void loop() {
     if (alertOn[i]) anyAlert = true;
   }
 
-  // i-advance ang simulated time ug mo-report kada simulated nga adlaw
+  // move simulated time forward and report once per simulated day
   simHours += HOURS_PER_TICK;
   int day = (int)(simHours / 24.0);
   if (day > lastReportDay) {
